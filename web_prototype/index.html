@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Intelligent E-Waste Router</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app-container">
+        <div class="bg-glow"></div>
+        
+        <header>
+            <div style="font-size: 1.1rem; letter-spacing: 0.5px;">E-WASTE<span style="color:var(--primary)">ROUTER</span></div>
+            <div class="header-profile" onclick="app.nav('profile')">
+                <span id="header-pts">0 PTS</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"></circle><path d="M12 14c-6.1 0-8 4-8 4v2h16v-2s-1.9-4-8-4z"></path></svg>
+            </div>
+        </header>
+
+        <div id="main-content">
+            
+            <!-- DASHBOARD SCREEN -->
+            <div id="screen-dashboard" class="screen active">
+                <div class="glass-card">
+                    <h3 class="mb-4">E-Waste Impact Dashboard</h3>
+                    <div class="stat-grid">
+                        <div class="stat-box" style="color: var(--primary)">
+                            <h3 id="dash-scanned">0</h3><p>Devices Scanned</p>
+                        </div>
+                        <div class="stat-box" style="color: var(--reward)">
+                            <h3 id="dash-rewards">0</h3><p>Rewards Earned</p>
+                        </div>
+                        <div class="stat-box" style="color: var(--accent)">
+                            <h3 id="dash-recycled">0</h3><p>Materials (g)</p>
+                        </div>
+                        <div class="stat-box" style="color: var(--warning)">
+                            <h3 id="dash-sold">0</h3><p>Devices Sold</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 class="mb-2">Sustainability Metrics</h3>
+                    <p class="text-muted" style="font-size: 13px;">CO2 Emissions Saved (kg)</p>
+                    <div class="progress-container mb-4"><div id="co2-bar" class="progress-bar" style="width: 0%;"></div></div>
+                    <div class="flex-between">
+                        <span style="font-weight: bold; font-size: 18px;" id="co2-amount">0.0 kg</span>
+                        <span class="tag repairable">Eco-Hero Level 1</span>
+                    </div>
+                </div>
+
+                <button class="primary" onclick="app.simulateScanData()">+ Run Automated Simulation Test (5 Devices)</button>
+            </div>
+
+            <!-- SCAN SCREEN -->
+            <div id="screen-scan" class="screen">
+                <div class="glass-card text-center" style="margin-top: 10vh;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-bottom:16px;">
+                        <path d="M4 7V4h3M20 7V4h-3M4 17v3h3M20 17v3h-3M9 12h6"></path>
+                    </svg>
+                    <h3 class="mb-2">Scan Device IMEI / QR</h3>
+                    <p class="text-muted mb-4" style="font-size: 13px;">Ensure the device label is clearly visible.</p>
+                    
+                    <div id="qr-reader" style="width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px;"></div>
+                    <div id="qr-reader-results" class="hidden"></div>
+                    
+                    <div class="flex-between mb-2">
+                        <span style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: bold;">Manual Entry</span>
+                        <button class="nav-btn" style="font-size: 10px; padding: 4px 8px;" onclick="app.toggleCamera()">Toggle Camera</button>
+                    </div>
+                    <input type="text" id="imei-input" placeholder="e.g. 359281093123849">
+                    <button class="primary mt-4" onclick="app.analyzeDevice()">Analyze Device</button>
+                </div>
+            </div>
+
+            <!-- ANALYSIS RESULT SCREEN -->
+            <div id="screen-analysis" class="screen">
+                <div id="analysis-loading" class="glass-card text-center" style="margin-top: 20vh;">
+                    <div style="width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                    <h3 class="mt-4">AI Vision Analysis</h3>
+                    <p class="text-muted" style="font-size: 13px; margin-top: 8px;">Intercepting hardware metrics & matching signature...</p>
+                </div>
+                
+                <div id="analysis-result" class="glass-card hidden text-center" style="margin-top: 5vh;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="var(--primary)" style="margin-bottom: 16px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path></svg>
+                    <h2 class="mb-4">Condition Identified</h2>
+                    
+                    <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; text-align: left; line-height: 2; font-size: 14px;">
+                        <div class="flex-between"><span>Model:</span> <strong id="res-model"></strong></div>
+                        <div class="flex-between"><span>Age:</span> <strong id="res-age"></strong></div>
+                        <div class="flex-between"><span>Hardware Health:</span> <strong id="res-health"></strong></div>
+                        <div class="flex-between"><span>Market Value:</span> <strong id="res-value" style="color:var(--primary)"></strong></div>
+                    </div>
+                    
+                    <div class="mt-4 mb-4">
+                        <p class="text-muted" style="font-size: 12px; text-transform:uppercase; margin-bottom: 8px;">AI Classification Tag</p>
+                        <div id="res-tag" class="tag" style="font-size: 16px; padding: 8px 16px;"></div>
+                    </div>
+
+                    <button class="primary" onclick="app.routeDevice()">Commence Routing</button>
+                </div>
+            </div>
+
+            <!-- RESALE PATH SCREEN -->
+            <div id="screen-resale" class="screen">
+                <div class="glass-card">
+                    <h2 class="text-warning mb-2">Resale & Repair Path</h2>
+                    <p class="text-muted" style="font-size:13px;">This device is authorized for secondary market listing.</p>
+                    <div class="stat-box mt-4 mb-4 text-left" style="border-color: var(--warning); border-left: 4px solid var(--warning);">
+                        <h4 id="resale-model" class="mb-2"></h4>
+                        <p id="resale-imei"></p>
+                    </div>
+
+                    <h4 class="mb-2">Repair History Logs</h4>
+                    <ul style="font-size: 13px; color: var(--text-muted); padding-left: 16px; line-height: 1.8;" class="mb-4">
+                        <li>Battery cycle refreshed natively (Health: 98%)</li>
+                        <li>Screen passed OEM diagnostics</li>
+                    </ul>
+
+                    <h4 class="mb-4">Required Actions</h4>
+                    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                        <input type="checkbox" id="resale-ztep" style="width: 20px; height: 20px; accent-color: var(--warning);" onchange="app.checkResale()">
+                        <span style="font-size: 14px; font-weight: bold;">Confirm Light Wiping (ZTEP)</span>
+                    </div>
+
+                    <button id="btn-passport" class="primary secondary mb-4" onclick="app.updatePassport()" disabled style="border-color: var(--warning); color: var(--warning);">Update Digital Blockchain Passport</button>
+
+                    <button id="btn-list-market" class="primary" style="background: var(--warning);" disabled onclick="app.listToMarket()">List on Marketplace & Claim Reward</button>
+                </div>
+            </div>
+
+            <!-- WIPING SECURE PATH SCREEN -->
+            <div id="screen-wiping" class="screen">
+                <div class="glass-card">
+                    <h2 class="text-danger mb-2">Data Wiping Protocol</h2>
+                    <p class="text-muted" style="font-size:13px;">Mandatory military-grade erasure for Non-Repairable units.</p>
+                    
+                    <div class="stat-box mt-4 mb-4 text-left" style="border-color: var(--danger); border-left: 4px solid var(--danger);">
+                        <h4 id="wipe-model" class="mb-2"></h4>
+                        <p id="wipe-imei"></p>
+                    </div>
+
+                    <h4>Triple-Stage Wiping Sequence</h4>
+                    <p class="text-muted mb-4" style="font-size: 11px; text-transform:uppercase;">Admin Action Required per step</p>
+
+                    <!-- Steps -->
+                    <div id="wipe-step-1" class="step-row active">
+                        <div class="step-circle">1</div>
+                        <div style="flex:1">
+                            <span style="font-size: 14px; font-weight:bold; display:block;">Pre-Wipe Verification</span>
+                            <span class="text-muted" style="font-size:11px;">Verify device partition integrity</span>
+                        </div>
+                        <button class="nav-btn" style="border-color:var(--danger); color:var(--danger); padding:6px 12px;" onclick="app.progressWipe(1)">Confirm</button>
+                    </div>
+
+                    <div id="wipe-step-2" class="step-row">
+                        <div class="step-circle">2</div>
+                        <div style="flex:1">
+                            <span style="font-size: 14px; font-weight:bold; display:block;">Active Data Erasure</span>
+                            <div class="progress-container"><div id="wipe-progress" class="progress-bar" style="width: 0%; background:var(--danger);"></div></div>
+                        </div>
+                        <button id="btn-wipe-execute" class="nav-btn" style="border-color:var(--danger); color:var(--danger); padding:6px 12px; display:none;" onclick="app.executeWipeAnim()">Execute</button>
+                    </div>
+
+                    <div id="wipe-step-3" class="step-row">
+                        <div class="step-circle">3</div>
+                        <div style="flex:1">
+                            <span style="font-size: 14px; font-weight:bold; display:block;">Post-Wipe Confirmation</span>
+                            <span class="text-muted" style="font-size:11px;">Auditor sign-off payload generator</span>
+                        </div>
+                        <button id="btn-wipe-finish" class="nav-btn" style="border-color:var(--danger); color:var(--danger); padding:6px 12px; display:none;" onclick="app.progressWipe(3)">Sign-off</button>
+                    </div>
+
+                    <div id="cert-area" class="hidden mt-4">
+                        <h4 class="text-primary">Immutable Blockchain Certificate</h4>
+                        <div id="cert-hash" class="cert-box"></div>
+                    </div>
+
+                    <button id="btn-recycle" class="primary mt-4 hidden" onclick="app.sendToRecycling()">Authorize Recycling & Claim Reward</button>
+                </div>
+            </div>
+
+            <!-- PROFILE & TRACKING SCREEN -->
+            <div id="screen-profile" class="screen">
+                <div class="glass-card flex-between">
+                    <div>
+                        <h2 class="mb-2">Admin Profile</h2>
+                        <span class="tag reward">Lead Auditor</span>
+                    </div>
+                    <div style="width: 60px; height: 60px; background: var(--surface-solid); border-radius: 50%; display:flex; align-items:center; justify-content:center; border: 2px solid var(--primary);">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--primary)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+                    </div>
+                </div>
+
+                <div class="glass-card pb-0">
+                    <h3 class="mb-4">Inventory & Tracking List</h3>
+                    <div style="display:flex; gap:10px; margin-bottom: 16px;">
+                        <button class="nav-btn active" style="flex:1" id="tab-resale" onclick="app.renderList('Resale')">Listed/Sold</button>
+                        <button class="nav-btn" style="flex:1; border-color:var(--text-muted); color:var(--text-muted);" id="tab-recycle" onclick="app.renderList('Recycled')">Recycled</button>
+                    </div>
+                    <div id="tracking-list" style="max-height: 400px; overflow-y: auto; padding-bottom: 20px;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item active" id="nav-dashboard" onclick="app.nav('dashboard')">
+                <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg>
+                <span>Metrics</span>
+            </div>
+            <div class="nav-item" id="nav-scan" onclick="app.nav('scan')">
+                <svg viewBox="0 0 24 24"><path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"></path><path d="M8 8h8v8H8z" opacity="0.3"></path></svg>
+                <span>Scan</span>
+            </div>
+            <div class="nav-item" id="nav-profile" onclick="app.nav('profile')">
+                <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path></svg>
+                <span>Tracking</span>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="app.js"></script>
+</body>
+</html>
