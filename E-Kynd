@@ -1,0 +1,82 @@
+♻️ E-Waste Management System
+🚀 Overview
+
+The E-Waste Management System is a smart and eco-friendly solution designed to manage electronic waste efficiently. This project integrates AI, real-time data fetching, and secure data wiping protocols to ensure both environmental safety and user data privacy. It enables users to identify e-waste, locate nearby recycling centers, and dispose of devices responsibly.
+
+🔥 Key Features
+📷 AI-Based Camera Scanner
+Real-time image scanning using camera
+Detects e-waste items such as mobiles, batteries, and laptops
+Provides instant classification
+🌐 Real-Time Data Fetch
+Retrieves nearby authorized e-waste recycling centers
+Displays location, distance, and navigation details
+Uses live API data instead of static information
+🔐 Secure Data Wiping System
+
+Ensures complete removal of personal data before recycling:
+
+🟡 Before Wiping
+Backup important data
+Logout from accounts
+Remove SIM/SD cards
+🔵 During Wiping
+Secure data deletion using:
+DoD 5220.22-M standard
+NIST 800-88 guidelines
+Multiple overwrite passes
+Real-time progress tracking
+🟢 After Wiping
+Verification of complete data removal
+Confirmation status display
+Optional data erasure certification
+📍 Nearby Recycling Centers
+Locate e-waste collection centers using maps
+Access directions and contact details
+🚚 Pickup Request System
+Schedule doorstep pickup for e-waste
+Select preferred date and time
+📊 User Dashboard
+Track total e-waste recycled
+View environmental impact (CO₂ saved)
+🎁 Reward System
+Earn points for responsible recycling
+Redeem rewards and incentives
+💻 Tech Stack
+Mobile App: Flutter
+Web App: HTML, CSS, JavaScript
+Backend (Optional): Node.js / Firebase
+APIs: Google Maps API
+AI Model (Optional): TensorFlow / Teachable Machine
+📁 Project Structure
+e-waste-management-system/
+│
+├── mobile-app_prototype/   # Flutter mobile application
+├── web_prototype/          # Web application (HTML, CSS, JS)
+▶️ How to Run the Project
+🌐 Web Application
+Open the web_prototype folder
+Run index.html in your browser
+📱 Mobile Application (Flutter)
+Open terminal inside mobile-app_prototype
+Run:
+flutter pub get
+flutter run
+🌍 Project Goal
+
+To build a sustainable and secure platform that promotes responsible e-waste disposal while ensuring complete data privacy through advanced data wiping protocols.
+
+🔮 Future Enhancements
+AI-based waste classification improvements
+Live pickup tracking system
+Blockchain integration for transparency
+Advanced analytics dashboard
+🤝 Contribution
+
+Contributions are welcome! Feel free to fork this repository and submit a pull request.
+
+📌 Conclusion
+
+This project combines technology, sustainability, and security to address the growing problem of e-waste. It ensures responsible recycling while protecting user data.
+
+⭐ If you find this project useful, please give it a star!
